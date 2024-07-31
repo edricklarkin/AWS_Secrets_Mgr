@@ -9,14 +9,13 @@ Does not require aws_signing_helper application
 
 import json
 from dotenv import dotenv_values
+from iam_rolesanywhere_session import IAMRolesAnywhereSession
 
 #call .env file with non-sensitive AWS details
 env_val = dotenv_values(".env")
 
 #secret id to retreive
 secret_id = 'test-secret'
-
-from iam_rolesanywhere_session import IAMRolesAnywhereSession
 
 roles_anywhere_session = IAMRolesAnywhereSession(
     profile_arn=env_val.get('PROFILE_ARN'),

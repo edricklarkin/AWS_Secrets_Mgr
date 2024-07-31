@@ -15,6 +15,7 @@ import MySQLdb
 import json
 from dotenv import dotenv_values
 from iam_rolesanywhere_session import IAMRolesAnywhereSession
+from copy import deepcopy
 
 #call .env file with non-sensitive AWS details
 env_val = dotenv_values(".env")
@@ -36,7 +37,7 @@ client = roles_anywhere_session.client('secretsmanager',verify=False)
 
 #create random password
 def generate_password(length):
-    characters = string.ascii_letters + string.digits + string.punctuation
+    characters = string.ascii_letters + string.digits
     password = ''.join(random.choice(characters) for _ in range(length))
     return password
 
@@ -45,9 +46,9 @@ def get_db_credentials():
     
     return json.loads(client.get_secret_value(SecretId=secret_name)['SecretString'])
  
-#change password
+#copy current secrets dict and change password in new secret dict
 current_secret = get_db_credentials()
-new_secret = dict(current_secret)
+new_secret = deepcopy(current_secret)
 new_secret['password'] = generate_password(12)
 
 
